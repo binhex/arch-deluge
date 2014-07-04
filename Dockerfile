@@ -22,15 +22,12 @@ VOLUME /data
 # expose port for http
 EXPOSE 8112
 
-# expose port for https
-EXPOSE 8122
-
-# expose port for torrent data
-EXPOSE 53160
-EXPOSE 53160/udp
-
 # expose port for deluge daemon
 EXPOSE 58846
+
+# expose port for incoming torrent data (tcp and udp)
+EXPOSE 58946
+EXPOSE 58946/udp
 
 # set permissions
 #################
