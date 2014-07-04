@@ -25,6 +25,13 @@ EXPOSE 8112
 # expose port for https
 EXPOSE 8122
 
+# expose port for torrent data
+EXPOSE 53160
+EXPOSE 53160/udp
+
+# expose port for deluge daemon
+EXPOSE 58846
+
 # set permissions
 #################
 
