@@ -46,6 +46,15 @@ RUN chmod -R 777 /root/
 
 ADD deluge.conf /etc/supervisor/conf.d/deluge.conf
 
+# cleanup
+#########
+
+# completely empty pacman cache folder
+RUN pacman -Scc --noconfirm
+
+# remove temporary files
+RUN rm -rf /tmp/*
+
 # run supervisor
 ################
 
