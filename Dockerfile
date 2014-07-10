@@ -39,6 +39,7 @@ RUN chown nobody:users /usr/bin/deluge-web
 # set permissions
 RUN chmod 775 /usr/bin/deluged
 RUN chmod 775 /usr/bin/deluge-web
+RUN chmod -R 777 /root/
 
 # add conf file
 ###############
