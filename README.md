@@ -1,9 +1,9 @@
-deluge
+Deluge
 ======
 
-Latest stable Deluge release for Arch Linux.
+Deluge - http://deluge-torrent.org/
 
-This is a Dockerfile for Deluge - http://deluge-torrent.org/
+Latest stable Deluge release for Arch Linux.
 
 **Pull image**
 
