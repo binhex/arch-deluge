@@ -8,7 +8,7 @@ MAINTAINER binhex
 RUN pacman -Sy --noconfirm
 
 # run pacman to install application
-RUN pacman -S deluge python2-mako --noconfirm
+RUN pacman -S deluge python2-mako python2-notify --noconfirm
 
 # docker settings
 #################
