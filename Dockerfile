@@ -33,13 +33,10 @@ EXPOSE 58946/udp
 #################
 
 # change owner
-RUN chown nobody:users /usr/bin/deluged
-RUN chown nobody:users /usr/bin/deluge-web
+RUN chown nobody:users /usr/bin/deluged /usr/bin/deluge-web /root
 
 # set permissions
-RUN chmod 775 /usr/bin/deluged
-RUN chmod 775 /usr/bin/deluge-web
-RUN chmod -R 777 /root/
+RUN chmod 775 /usr/bin/deluged /usr/bin/deluge-web /root
 
 # add conf file
 ###############
