@@ -46,6 +46,9 @@ ADD deluge.conf /etc/supervisor/conf.d/deluge.conf
 # cleanup
 #########
 
+# remove uneeded apps from base-devel group - used for AUR package compilation
+RUN pacman -Ru base-devel --noconfirm
+
 # completely empty pacman cache folder
 RUN pacman -Scc --noconfirm
 
