@@ -1,14 +1,25 @@
-FROM binhex/arch-base:2014100603
+FROM binhex/arch-base:2014101300
 MAINTAINER binhex
 
-# install application
-#####################
+# additional files
+##################
 
-# update package databases for arch
-RUN pacman -Sy --noconfirm
+# add supervisor conf file for app
+ADD deluge.conf /etc/supervisor/conf.d/deluge.conf
 
-# run pacman to install application
-RUN pacman -S unzip unrar deluge python2-service-identity python2-mako python2-notify --noconfirm
+# install app
+#############
+
+# install install app using pacman, set perms, cleanup
+RUN pacman -Sy --noconfirm && \
+	pacman -S unzip unrar deluge python2-service-identity python2-mako python2-notify --noconfirm && \
+	pacman -Scc --noconfirm && \
+	chown -R nobody:users /usr/bin/deluged /usr/bin/deluge-web /root && \
+	chmod -R 775 /usr/bin/deluged /usr/bin/deluge-web /root && \	
+	rm -rf /archlinux/usr/share/locale && \
+	rm -rf /archlinux/usr/share/man && \
+	rm -rf /root/* && \
+	rm -rf /tmp/*
 
 # docker settings
 #################
@@ -28,32 +39,6 @@ EXPOSE 58846
 # expose port for incoming torrent data (tcp and udp)
 EXPOSE 58946
 EXPOSE 58946/udp
-
-# set permissions
-#################
-
-# change owner
-RUN chown nobody:users /usr/bin/deluged /usr/bin/deluge-web /root
-
-# set permissions
-RUN chmod 775 /usr/bin/deluged /usr/bin/deluge-web /root
-
-# add conf file
-###############
-
-ADD deluge.conf /etc/supervisor/conf.d/deluge.conf
-
-# cleanup
-#########
-
-# remove unneeded apps from base-devel group - used for AUR package compilation
-RUN pacman -Ru base-devel --noconfirm
-
-# completely empty pacman cache folder
-RUN pacman -Scc --noconfirm
-
-# remove temporary files
-RUN rm -rf /tmp/*
 
 # run supervisor
 ################
