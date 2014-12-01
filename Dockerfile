@@ -8,7 +8,7 @@ MAINTAINER binhex
 ADD deluge.conf /etc/supervisor/conf.d/deluge.conf
 
 # copy start bash script (starts deluge daemon and webui in the correct order)
-ADD start.sh /usr/bin/start.sh
+ADD start.sh /home/nobody/start.sh
 
 # install app
 #############
@@ -17,8 +17,8 @@ ADD start.sh /usr/bin/start.sh
 RUN pacman -Sy --noconfirm && \
 	pacman -S unzip unrar deluge python2-service-identity python2-mako python2-notify --noconfirm && \
 	pacman -Scc --noconfirm && \
-	chown -R nobody:users /usr/bin/start.sh /usr/bin/deluged /usr/bin/deluge-web /root && \
-	chmod -R 775 /usr/bin/start.sh /usr/bin/deluged /usr/bin/deluge-web /root && \	
+	chown -R nobody:users /usr/bin/deluged /usr/bin/deluge-web /root && \
+	chmod -R 775 /usr/bin/deluged /usr/bin/deluge-web /root && \	
 	rm -rf /archlinux/usr/share/locale && \
 	rm -rf /archlinux/usr/share/man && \
 	rm -rf /root/* && \
