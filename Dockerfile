@@ -7,9 +7,6 @@ MAINTAINER binhex
 # add supervisor conf file for app
 ADD deluge.conf /etc/supervisor/conf.d/deluge.conf
 
-# copy start bash script (starts deluge daemon and webui in the correct order)
-ADD start.sh /home/nobody/start.sh
-
 # install app
 #############
 
