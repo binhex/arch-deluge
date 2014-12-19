@@ -38,7 +38,7 @@ EXPOSE 58946/udp
 ###############
 
 # add deluge to runit
-RUN mkdir /etc/service/deluge
+RUN mkdir -p /etc/service/deluge
 ADD runit.sh /etc/service/deluge/run
 RUN chmod +x /etc/service/deluge/run
 
