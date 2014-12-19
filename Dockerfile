@@ -1,5 +1,11 @@
-FROM binhex/arch-base:test
+FROM binhex/arch-base:2014101300
 MAINTAINER binhex
+
+# additional files
+##################
+
+# add supervisor conf file for app
+ADD deluge.conf /etc/supervisor/conf.d/deluge.conf
 
 # install app
 #############
@@ -34,15 +40,8 @@ EXPOSE 58846
 EXPOSE 58946
 EXPOSE 58946/udp
 
-# runit scripts
-###############
+# run supervisor
+################
 
-# add deluge to runit
-RUN mkdir -p /etc/service/deluge
-ADD runit.sh /etc/service/deluge/run
-RUN chmod +x /etc/service/deluge/run
-
-# run services
-##############
-
-CMD ["runsvdir", "/etc/service/"]
+# run supervisor
+CMD ["supervisord", "-c", "/etc/supervisor.conf", "-n"]
