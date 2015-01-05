@@ -1,4 +1,4 @@
-FROM binhex/arch-base:2014101300
+FROM binhex/arch-base:2015010500
 MAINTAINER binhex
 
 # additional files
@@ -13,11 +13,11 @@ ADD deluge.conf /etc/supervisor/conf.d/deluge.conf
 # install install app using pacman, set perms, cleanup
 RUN pacman -Sy --noconfirm && \
 	pacman -S unzip unrar deluge python2-service-identity python2-mako python2-notify --noconfirm && \
-	pacman -Scc --noconfirm && \
 	chown -R nobody:users /usr/bin/deluged /usr/bin/deluge-web /root && \
 	chmod -R 775 /usr/bin/deluged /usr/bin/deluge-web /root && \	
-	rm -rf /archlinux/usr/share/locale && \
-	rm -rf /archlinux/usr/share/man && \
+	yes|pacman -Scc && \	
+	rm -rf /usr/share/locale/* && \
+	rm -rf /usr/share/man/* && \
 	rm -rf /root/* && \
 	rm -rf /tmp/*
 
