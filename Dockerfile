@@ -12,7 +12,7 @@ ADD deluge.conf /etc/supervisor/conf.d/deluge.conf
 
 # install install app using pacman, set perms, cleanup
 RUN pacman -Sy --noconfirm && \
-	pacman -S unzip unrar deluge python2-service-identity python2-mako python2-notify --noconfirm && \
+	pacman -S unzip unrar librsvg pygtk python2-service-identity python2-mako python2-notify deluge --noconfirm && \
 	chown -R nobody:users /usr/bin/deluged /usr/bin/deluge-web /root && \
 	chmod -R 775 /usr/bin/deluged /usr/bin/deluge-web /root && \	
 	yes|pacman -Scc && \	
