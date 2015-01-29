@@ -18,7 +18,8 @@ RUN pacman -Sy --noconfirm && \
 	pacman -S unzip unrar librsvg pygtk python2-service-identity python2-mako python2-notify deluge --noconfirm && \
 	chown -R nobody:users /usr/bin/deluged /usr/bin/deluge-web /root && \
 	chmod -R 775 /usr/bin/deluged /usr/bin/deluge-web /root && \
-	yes|pacman -Scc && \	
+	chmod +x /usr/bin/start.sh && \
+	yes|pacman -Scc && \
 	rm -rf /usr/share/locale/* && \
 	rm -rf /usr/share/man/* && \
 	rm -rf /root/* && \
