@@ -1,0 +1,17 @@
+﻿Revert "add in ufw support"
+
+This reverts commit d7b2d2abb6e251dc96ce14ee8bd8b34f48c26812.
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch is up-to-date with 'origin/master'.
+#
+# You are currently reverting commit d7b2d2a.
+#
+# Changes to be committed:
+#	modified:   Dockerfile
+#	modified:   README.md
+#	deleted:    filter.sh
+#
+
