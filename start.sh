@@ -1,8 +1,8 @@
 #!/bin/sh
 
-# enable/disable pia proxy only based on env variable set from docker container run command
-if [[ $PIAPROXY == "yes" ]]; then
-	echo "Restricting outbound communioation to PIA proxy only"
+# filter outbound traffic depending on env variable defined
+if [[ $FILTER > 0 ]]; then
+	echo "Filtering outbound communioation"
 	
 	# drop all outbound packets
 	iptables -P OUTPUT DROP
@@ -11,18 +11,18 @@ if [[ $PIAPROXY == "yes" ]]; then
 	iptables -A OUTPUT -p udp -o eth0 --dport 53 -j ACCEPT
 	iptables -A INPUT -p udp -i eth0 --sport 53 -j ACCEPT
 
-	# allow outbound socks proxy only to pia (tcp)
-	iptables -A OUTPUT -o eth0 -p tcp -d proxy-nl.privateinternetaccess.com --dport 1080 -m state --state NEW,ESTABLISHED -j ACCEPT
-	iptables -A INPUT -i eth0 -p tcp --sport 1080 -m state --state ESTABLISHED -j ACCEPT
-
-	# allow outbound socks proxy only to pia (udp)
-	iptables -A OUTPUT -o eth0 -p udp -d proxy-nl.privateinternetaccess.com --dport 1080 -m state --state NEW,ESTABLISHED -j ACCEPT
-	iptables -A INPUT -i eth0 -p udp --sport 1080 -m state --state ESTABLISHED -j ACCEPT
+	# allow outbound tcp only for port 1080 (pia socks5 proxy)
+	iptables -A OUTPUT -p tcp -o eth0 --dport $FILTER -j ACCEPT
+	iptables -A INPUT -p tcp -i eth0 --sport $FILTER -j ACCEPT
+	
+	# allow outbound udp only for port 1080 (pia socks5 proxy)
+	iptables -A OUTPUT -p udp -o eth0 --dport $FILTER -j ACCEPT
+	iptables -A INPUT -p udp -i eth0 --sport $FILTER -j ACCEPT
 		
-elif [[ $PIAPROXY == "no" ]]; then
-	echo "Outbound communication unrestricted"
+elif [[ $FILTER == 0 ]]; then
+	echo "Outbound communication not filtered"
 	
 else
-	echo "Outbound communication not defined, defaulting to unrestricted"
+	echo "Outbound communication not defined, defaulting to not filtered"
 		
 fi
