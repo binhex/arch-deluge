@@ -8,7 +8,7 @@ MAINTAINER binhex
 ADD deluge.conf /etc/supervisor/conf.d/deluge.conf
 
 # copy start bash script to /usr/bin dir (used for outbound filtering using iptables)
-ADD start.sh /usr/bin/start.sh
+ADD filter.sh /root/filter.sh
 
 # install app
 #############
@@ -18,7 +18,7 @@ RUN pacman -Sy --noconfirm && \
 	pacman -S unzip unrar librsvg pygtk python2-service-identity python2-mako python2-notify deluge --noconfirm && \
 	chown -R nobody:users /usr/bin/deluged /usr/bin/deluge-web /root && \
 	chmod -R 775 /usr/bin/deluged /usr/bin/deluge-web /root && \
-	chmod +x /usr/bin/start.sh && \
+	/root/filter.sh && \
 	yes|pacman -Scc && \
 	rm -rf /usr/share/locale/* && \
 	rm -rf /usr/share/man/* && \
