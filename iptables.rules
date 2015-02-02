@@ -1,0 +1,7 @@
+*filter
+:OUTPUT DROP [0:0] -m comment --comment "drop all, default policy"
+-I OUTPUT -p tcp -m tcp -m multiport ! --dports 80,443 -j ACCEPT -m comment --comment "accept all, except tcp dst 80 & 443"
+-I OUTPUT -p udp -m udp -m multiport ! --dports 80,443 -j ACCEPT -m comment --comment "accept all, except udp dst 80 & 443"
+-I OUTPUT -p tcp -m tcp -m multiport ! --sports 80,443 -j ACCEPT -m comment --comment "accept all, except tcp src 80 & 443"
+-I OUTPUT -p udp -m udp -m multiport ! --sports 80,443 -j ACCEPT -m comment --comment "accept all, except udp src 80 & 443"
+COMMIT

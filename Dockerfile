@@ -7,6 +7,9 @@ MAINTAINER binhex
 # add supervisor conf file for app
 ADD deluge.conf /etc/supervisor/conf.d/deluge.conf
 
+# add iptables.rules file to prevent socks5 proxy leak for webseed
+ADD iptables.rules /etc/iptables/iptables.rules
+
 # install app
 #############
 
