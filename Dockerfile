@@ -10,18 +10,21 @@ ADD deluge.conf /etc/supervisor/conf.d/deluge.conf
 # add iptables.rules file to prevent socks5 proxy leak for webseed
 ADD iptables.rules /etc/iptables/iptables.rules
 
+# add bash script to restore iptable rules on startup
+ADD start.sh /root/start.sh
+
 # install app
 #############
 
 # install install app using pacman, set perms, cleanup
 RUN pacman -Sy --noconfirm && \
 	pacman -S unzip unrar librsvg pygtk python2-service-identity python2-mako python2-notify deluge --noconfirm && \
-	chown -R nobody:users /usr/bin/deluged /usr/bin/deluge-web /root && \
-	chmod -R 775 /usr/bin/deluged /usr/bin/deluge-web /root && \	
-	yes|pacman -Scc && \	
+	chmod +x /root/start.sh && \
+	chown -R nobody:users /usr/bin/deluged /usr/bin/deluge-web && \
+	chmod -R 775 /usr/bin/deluged /usr/bin/deluge-web && \	
+	yes|pacman -Scc && \
 	rm -rf /usr/share/locale/* && \
 	rm -rf /usr/share/man/* && \
-	rm -rf /root/* && \
 	rm -rf /tmp/*
 
 # docker settings
