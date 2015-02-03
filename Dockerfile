@@ -7,19 +7,12 @@ MAINTAINER binhex
 # add supervisor conf file for app
 ADD deluge.conf /etc/supervisor/conf.d/deluge.conf
 
-# add iptables.rules file to prevent socks5 proxy leak for webseed
-ADD iptables.rules /etc/iptables/iptables.rules
-
-# add bash script to restore iptable rules on startup
-ADD start.sh /root/start.sh
-
 # install app
 #############
 
 # install install app using pacman, set perms, cleanup
 RUN pacman -Sy --noconfirm && \
 	pacman -S unzip unrar librsvg pygtk python2-service-identity python2-mako python2-notify deluge --noconfirm && \
-	chmod +x /root/start.sh && \
 	chown -R nobody:users /usr/bin/deluged /usr/bin/deluge-web && \
 	chmod -R 775 /usr/bin/deluged /usr/bin/deluge-web && \	
 	yes|pacman -Scc && \
