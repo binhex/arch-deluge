@@ -1,4 +1,4 @@
-FROM binhex/arch-base:2015020300
+FROM binhex/arch-base:2015030300
 MAINTAINER binhex
 
 # additional files
@@ -7,18 +7,15 @@ MAINTAINER binhex
 # add supervisor conf file for app
 ADD deluge.conf /etc/supervisor/conf.d/deluge.conf
 
+# add install bash script
+ADD install.sh /root/install.sh
+
 # install app
 #############
 
-# install install app using pacman, set perms, cleanup
-RUN pacman -Sy --noconfirm && \
-	pacman -S unzip unrar librsvg pygtk python2-service-identity python2-mako python2-notify deluge --noconfirm && \
-	chown -R nobody:users /usr/bin/deluged /usr/bin/deluge-web && \
-	chmod -R 775 /usr/bin/deluged /usr/bin/deluge-web && \	
-	yes|pacman -Scc && \
-	rm -rf /usr/share/locale/* && \
-	rm -rf /usr/share/man/* && \
-	rm -rf /tmp/*
+# make executable and run bash scripts to install app
+RUN chmod +x /root/install.sh && \
+	/bin/bash /root/install.sh
 
 # docker settings
 #################
