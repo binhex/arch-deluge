@@ -5,10 +5,10 @@ MAINTAINER binhex
 ##################
 
 # add supervisor conf file for app
-ADD deluge.conf /etc/supervisor/conf.d/deluge.conf
+ADD *.conf /etc/supervisor/conf.d/
 
 # add install bash script
-ADD install.sh /root/install.sh
+ADD install.sh /root/
 
 # install app
 #############
