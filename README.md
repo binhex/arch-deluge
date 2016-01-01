@@ -19,7 +19,7 @@ docker run -d
 Please replace all user variables in the above command defined by <> with the correct values.
 
 **Access application**<br>
-http://\<host ip\>:8112
+`http://<host ip>:8112`
 
 **Notes**<br>
 Default password for the webui is "deluge"
