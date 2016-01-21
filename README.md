@@ -1,8 +1,14 @@
-**Deluge**<br>
-[Application website](http://deluge-torrent.org/)
+**Application**
 
-**Description**<br>
-Latest stable release of Deluge using Pacman to install.
+[Deluge](http://deluge-torrent.org/)
+
+**Application description**
+
+Deluge is a full-featured ​BitTorrent client for Linux, OS X, Unix and Windows. It uses ​libtorrent in its backend and features multiple user-interfaces including: GTK+, web and console. It has been designed using the client server model with a daemon process that handles all the bittorrent activity. The Deluge daemon is able to run on headless machines with the user-interfaces being able to connect remotely from any platform.
+
+**Build notes**
+
+Latest stable Deluge release from Arch Linux repo.
 
 **Usage**
 ```
