@@ -38,8 +38,8 @@ else
 fi
 
 # set permissions inside container
-chown -R "${UID}":"${GID}" /usr/bin/deluged /usr/bin/deluge-web
-chmod -R 775 /usr/bin/deluged /usr/bin/deluge-web
+chown -R "${UID}":"${GID}" /usr/bin/deluged /usr/bin/deluge-web /home/nobody
+chmod -R 775 /usr/bin/deluged /usr/bin/deluge-web /home/nobody
 
 echo "[info] Starting Supervisor..."
 
