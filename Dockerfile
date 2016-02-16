@@ -8,10 +8,7 @@ MAINTAINER binhex
 ADD setup/*.conf /etc/supervisor/conf.d/
 
 # add install bash script
-ADD setup/install.sh /root/
-
-# add bash scripts to set uid and gid and then set permissions
-ADD setup/init.sh /root/init.sh
+ADD setup/root/*.sh /root/
 
 # install app
 #############
