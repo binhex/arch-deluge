@@ -10,16 +10,6 @@ pacman_packages="unzip unrar pygtk python2-service-identity python2-mako python2
 pacman -Syu --ignore filesystem --noconfirm
 pacman -S --needed $pacman_packages --noconfirm
 
-# add in temporary fixes for torrents stuck in paused mode
-curl -o /tmp/libtorrent-rasterbar.tar.xz -L http://ala.seblu.net/packages/l/libtorrent-rasterbar/libtorrent-rasterbar-1%3A1.0.7-2-x86_64.pkg.tar.xz
-pacman -U /tmp/libtorrent-rasterbar.tar.xz --noconfirm
-
-curl -o /tmp/boost-libs.tar.xz -L http://ala.seblu.net/packages/b/boost-libs/boost-libs-1.59.0-5-x86_64.pkg.tar.xz
-pacman -U /tmp/boost-libs.tar.xz --noconfirm
-
-curl -o /tmp/boost.tar.xz -L http://ala.seblu.net/packages/b/boost/boost-1.59.0-5-x86_64.pkg.tar.xz
-pacman -U /tmp/boost.tar.xz --noconfirm
-
 # cleanup
 yes|pacman -Scc
 rm -rf /usr/share/locale/*
