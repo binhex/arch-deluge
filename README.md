@@ -20,8 +20,8 @@ docker run -d \
     -v <path for data files>:/data \
     -v <path for config files>:/config \
     -v /etc/localtime:/etc/localtime:ro \
-    -e UID=<uid for user> \
-    -e GID=<gid for user> \
+    -e PUID=<uid for user> \
+    -e PGID=<gid for user> \
     binhex/arch-deluge
 ```
 
@@ -41,14 +41,14 @@ docker run -d \
     -v /apps/docker/deluge/data:/data \
     -v /apps/docker/deluge/config:/config \
     -v /etc/localtime:/etc/localtime:ro \
-    -e UID=0 \
-    -e GID=0 \
+    -e PUID=0 \
+    -e PGID=0 \
     binhex/arch-deluge
 ```
 
 **Notes**<br>
 
-User ID (UID) and Group ID (GID) can be found by issuing the following command for the user you want to run the container as:-
+User ID (PUID) and Group ID (PGID) can be found by issuing the following command for the user you want to run the container as:-
 
 ```
 id <username>
