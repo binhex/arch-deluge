@@ -3,22 +3,72 @@
 # exit script if return code != 0
 set -e
 
+# build scripts
+####
+
+# download build scripts from github
+curl -o /tmp/scripts-master.zip -L https://github.com/binhex/scripts/archive/master.zip
+
+# unzip build scripts
+unzip /tmp/scripts-master.zip -d /tmp
+
+# move shell scripts to /root
+find /tmp/scripts-master/ -type f -name '*.sh' -exec mv -i {} /root/  \;
+
+# aor packages
+####
+
 # define pacman packages
-pacman_packages="unzip unrar pygtk python2-service-identity python2-mako python2-notify"
+pacman_packages="pygtk python2-service-identity python2-mako python2-notify"
 
 # install pre-reqs
 pacman -S --needed $pacman_packages --noconfirm
 
-# call aor script (arch official repo)
-#source /root/aor.sh
+# define arch official repo (aor) packages
+aor_packages=""
 
-# manually download stable package from binhex repo
+# define arch official repo (aor) package type e.g. core/community/extra
+aor_package_type="extra"
+
+# call aor script (arch official repo)
+source /root/aor.sh
+
+# aur packages
+####
+
+# define aur helper
+aur_helper="apacman"
+
+# define aur packages
+aur_packages=""
+
+# call aur install script (arch user repo)
+source /root/aur.sh
+
+# manually download stable package from binhex repo (latest deluge on aor is beta/rc)
 curl -o /tmp/deluge-1.3.11-3-any.pkg.tar.xz -L https://github.com/binhex/arch-packages/raw/master/compiled/deluge-1.3.13-1-any.pkg.tar.xz
 pacman -U /tmp/deluge-1.3.11-3-any.pkg.tar.xz --noconfirm
 
-# manually remove .dev0 from compiled package name (is a result of pull commit from github)
-mv "/usr/lib/python2.7/site-packages/deluge-1.3.13.dev0-py2.7.egg-info/" "/usr/lib/python2.7/site-packages/deluge-1.3.13-py2.7.egg-info/"
-sed -i -e 's~\.dev0~~g' "/usr/lib/python2.7/site-packages/deluge-1.3.13-py2.7.egg-info/PKG-INFO" "/usr/bin/deluge" "/usr/bin/deluge-console" "/usr/bin/deluged" "/usr/bin/deluge-gtk" "/usr/bin/deluge-web"
+# container perms
+####
+
+# create file with contets of here doc
+cat <<'EOF' > /tmp/permissions_heredoc
+# set permissions inside container
+chown -R "${PUID}":"${PGID}" /usr/bin/deluged /usr/bin/deluge-web /home/nobody
+chmod -R 775 /usr/bin/deluged /usr/bin/deluge-web /home/nobody
+
+EOF
+
+# replace permissions placeholder string with contents of file (here doc)
+sed -i '/# PERMISSIONS_PLACEHOLDER/{
+    s/# PERMISSIONS_PLACEHOLDER//g
+    r /tmp/permissions_heredoc
+}' /root/init.sh
+rm /tmp/permissions_heredoc
+
+# env vars
+####
 
 # cleanup
 yes|pacman -Scc
