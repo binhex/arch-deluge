@@ -60,6 +60,9 @@ cat <<'EOF' > /tmp/permissions_heredoc
 chown -R "${PUID}":"${PGID}" /usr/bin/deluged /usr/bin/deluge-web /home/nobody
 chmod -R 775 /usr/bin/deluged /usr/bin/deluge-web /home/nobody
 
+# set python.eggs folder to rx only for group and others
+mkdir -p /home/nobody/.python-eggs && chmod -R 755 /home/nobody/.python-eggs
+
 EOF
 
 # replace permissions placeholder string with contents of file (here doc)
