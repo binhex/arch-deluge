@@ -15,23 +15,29 @@ unzip /tmp/scripts-master.zip -d /tmp
 # move shell scripts to /root
 find /tmp/scripts-master/ -type f -name '*.sh' -exec mv -i {} /root/  \;
 
-# aor packages
+# pacman packages
 ####
 
 # define pacman packages
 pacman_packages="pygtk python2-service-identity python2-mako python2-notify"
 
-# install pre-reqs
-pacman -S --needed $pacman_packages --noconfirm
+# install compiled packages using pacman
+if [[ ! -z "${pacman_packages}" ]]; then
+	pacman -S --needed $pacman_packages --noconfirm
+fi
+
+# aor packages
+####
 
 # define arch official repo (aor) packages
 aor_packages=""
 
-# define arch official repo (aor) package type e.g. core/community/extra
-aor_package_type="extra"
-
 # call aor script (arch official repo)
 source /root/aor.sh
+
+# manually download stable package from binhex repo (latest deluge on aor is beta/rc)
+curl -o /tmp/deluge-1.3.11-3-any.pkg.tar.xz -L https://github.com/binhex/arch-packages/raw/master/compiled/deluge-1.3.13-1-any.pkg.tar.xz
+pacman -U /tmp/deluge-1.3.11-3-any.pkg.tar.xz --noconfirm
 
 # aur packages
 ####
@@ -44,10 +50,6 @@ aur_packages=""
 
 # call aur install script (arch user repo)
 source /root/aur.sh
-
-# manually download stable package from binhex repo (latest deluge on aor is beta/rc)
-curl -o /tmp/deluge-1.3.11-3-any.pkg.tar.xz -L https://github.com/binhex/arch-packages/raw/master/compiled/deluge-1.3.13-1-any.pkg.tar.xz
-pacman -U /tmp/deluge-1.3.11-3-any.pkg.tar.xz --noconfirm
 
 # container perms
 ####
