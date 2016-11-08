@@ -35,10 +35,6 @@ aor_packages=""
 # call aor script (arch official repo)
 source /root/aor.sh
 
-# manually download stable package from binhex repo (latest deluge on aor is beta/rc)
-curl -o /tmp/deluge-1.3.11-3-any.pkg.tar.xz -L https://github.com/binhex/arch-packages/raw/master/compiled/deluge-1.3.13-1-any.pkg.tar.xz
-pacman -U /tmp/deluge-1.3.11-3-any.pkg.tar.xz --noconfirm
-
 # aur packages
 ####
 
@@ -50,6 +46,16 @@ aur_packages=""
 
 # call aur install script (arch user repo)
 source /root/aur.sh
+
+# call custom install script
+source /root/custom.sh
+
+# config
+####
+
+# manually remove .dev0 from compiled package name (is a result of pull commit from github)
+mv "/usr/lib/python2.7/site-packages/deluge-1.3.13.dev0-py2.7.egg-info/" "/usr/lib/python2.7/site-packages/deluge-1.3.13-py2.7.egg-info/"
+sed -i -e 's~\.dev0~~g' "/usr/lib/python2.7/site-packages/deluge-1.3.13-py2.7.egg-info/PKG-INFO" "/usr/bin/deluge" "/usr/bin/deluge-console" "/usr/bin/deluged" "/usr/bin/deluge-gtk" "/usr/bin/deluge-web"
 
 # container perms
 ####
