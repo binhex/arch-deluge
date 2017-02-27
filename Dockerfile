@@ -10,6 +10,12 @@ ADD setup/*.conf /etc/supervisor/conf.d/
 # add install bash script
 ADD setup/root/*.sh /root/
 
+# add bash script to run deluge
+ADD apps/nobody/*.sh /home/nobody/
+
+# add pre-configured config files for nobody
+ADD config/nobody/ /home/nobody/
+
 # install app
 #############
 
