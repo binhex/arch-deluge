@@ -59,8 +59,8 @@ cat <<'EOF' > /tmp/permissions_heredoc
 chown -R "${PUID}":"${PGID}" /usr/bin/deluged /usr/bin/deluge-web /home/nobody
 chmod -R 775 /usr/bin/deluged /usr/bin/deluge-web /home/nobody
 
-# set python.eggs folder to rx only for group and others
-mkdir -p /home/nobody/.python-eggs && chmod -R 755 /home/nobody/.python-eggs
+# remove permissions for group and other from the Python-Eggs folder
+mkdir -p /home/nobody/.cache/Python-Eggs && chmod -R 700 /home/nobody/.cache/Python-Eggs
 
 EOF
 
