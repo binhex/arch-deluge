@@ -12,5 +12,12 @@ else
 
 fi
 
-echo "[info] Starting Deluge daemon..."
-/usr/bin/deluged -d -c /config -L info -l /config/deluged.log
+# run deluge daemon (daemonized, non-blocking)
+echo "[info] Attempting to start Deluge..."
+/usr/bin/deluged -c /config -L info -l /config/deluged.log
+
+# run script to check we don't have any torrents in an error state
+/home/nobody/torrentcheck.sh
+
+# run cat to prevent script exit
+cat
