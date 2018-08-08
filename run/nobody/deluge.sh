@@ -12,6 +12,9 @@ else
 
 fi
 
+# if pid file exists then remove (generated from previous run)
+rm -f /config/deluged.pid
+
 # run deluge daemon (daemonized, non-blocking)
 echo "[info] Attempting to start Deluge..."
 /usr/bin/deluged -c /config -L info -l /config/deluged.log
