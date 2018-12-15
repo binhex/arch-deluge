@@ -12,15 +12,16 @@ else
 
 fi
 
-# if pid file exists then remove (generated from previous run)
-rm -f /config/deluged.pid
-
 # run deluge daemon (daemonized, non-blocking)
 echo "[info] Attempting to start Deluge..."
+
+echo "[info] Removing deluge pid file (if it exists)..."
+rm -f /config/deluged.pid
+
 /usr/bin/deluged -c /config -L info -l /config/deluged.log
+echo "[info] Deluge process started"
 
 echo "[info] Waiting for Deluge process to start listening on port 58846..."
-
 while [[ $(netstat -lnt | awk "\$6 == \"LISTEN\" && \$4 ~ \".58846\"") == "" ]]; do
 	sleep 0.1
 done
@@ -31,11 +32,8 @@ done
 if ! pgrep -x "deluge-web" > /dev/null; then
 	echo "[info] Starting Deluge Web UI..."
 
-	# run deluge-web
+	# run deluge-web (note this is blocking)
 	/usr/bin/deluge-web -c /config
 
 	echo "[info] Deluge Web UI started"
 fi
-
-# run cat to prevent script exit
-cat
