@@ -3,6 +3,13 @@
 # exit script if return code != 0
 set -e
 
+# resetting to live repo and using pacman for this app.
+echo 'Server = http://mirror.bytemark.co.uk/archlinux/$repo/os/$arch' > /etc/pacman.d/mirrorlist
+echo 'Server = http://archlinux.mirrors.uk2.net/$repo/os/$arch' >> /etc/pacman.d/mirrorlist
+
+# sync package databases for pacman
+pacman -Syyu --noconfirm
+
 # build scripts
 ####
 
@@ -19,7 +26,7 @@ mv /tmp/scripts-master/shell/arch/docker/*.sh /root/
 ####
 
 # define pacman packages
-pacman_packages="pygtk python2-service-identity python2-mako python2-notify python2-pillow"
+pacman_packages="pygtk python2-service-identity python2-mako python2-notify python2-pillow deluge"
 
 # install compiled packages using pacman
 if [[ ! -z "${pacman_packages}" ]]; then
@@ -39,7 +46,7 @@ source /root/arc.sh
 ####
 
 # define arch official repo (aor) packages
-aor_packages="deluge"
+aor_packages=""
 
 # call aor script (arch official repo)
 source /root/aor.sh
@@ -122,6 +129,33 @@ rm /tmp/permissions_heredoc
 
 # env vars
 ####
+
+cat <<'EOF' > /tmp/envvars_heredoc
+
+export DELUGE_DAEMON_LOG_LEVEL=$(echo "${DELUGE_DAEMON_LOG_LEVEL}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
+if [[ ! -z "${DELUGE_DAEMON_LOG_LEVEL}" ]]; then
+	echo "[info] DELUGE_DAEMON_LOG_LEVEL defined as '${DELUGE_DAEMON_LOG_LEVEL}'" | ts '%Y-%m-%d %H:%M:%.S'
+else
+	echo "[info] DELUGE_DAEMON_LOG_LEVEL not defined,(via -e DELUGE_DAEMON_LOG_LEVEL), defaulting to 'info'" | ts '%Y-%m-%d %H:%M:%.S'
+	export DELUGE_DAEMON_LOG_LEVEL="info"
+fi
+
+export DELUGE_WEB_LOG_LEVEL=$(echo "${DELUGE_WEB_LOG_LEVEL}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
+if [[ ! -z "${DELUGE_WEB_LOG_LEVEL}" ]]; then
+	echo "[info] DELUGE_WEB_LOG_LEVEL defined as '${DELUGE_WEB_LOG_LEVEL}'" | ts '%Y-%m-%d %H:%M:%.S'
+else
+	echo "[info] DELUGE_WEB_LOG_LEVEL not defined,(via -e DELUGE_WEB_LOG_LEVEL), defaulting to 'info'" | ts '%Y-%m-%d %H:%M:%.S'
+	export DELUGE_WEB_LOG_LEVEL="info"
+fi
+
+EOF
+
+# replace env vars placeholder string with contents of file (here doc)
+sed -i '/# ENVVARS_PLACEHOLDER/{
+    s/# ENVVARS_PLACEHOLDER//g
+    r /tmp/envvars_heredoc
+}' /root/init.sh
+rm /tmp/envvars_heredoc
 
 # cleanup
 yes|pacman -Scc
