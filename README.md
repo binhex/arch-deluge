@@ -20,6 +20,8 @@ docker run -d \
     -v <path for data files>:/data \
     -v <path for config files>:/config \
     -v /etc/localtime:/etc/localtime:ro \
+    -e DELUGE_DAEMON_LOG_LEVEL=<critical|error|warning|info|debug> \
+    -e DELUGE_WEB_LOG_LEVEL=<critical|error|warning|info|debug> \
     -e UMASK=<umask for created files> \
     -e PUID=<uid for user> \
     -e PGID=<gid for user> \
@@ -42,6 +44,8 @@ docker run -d \
     -v /apps/docker/deluge/data:/data \
     -v /apps/docker/deluge/config:/config \
     -v /etc/localtime:/etc/localtime:ro \
+    -e DELUGE_DAEMON_LOG_LEVEL=info \
+    -e DELUGE_WEB_LOG_LEVEL=info \
     -e UMASK=000 \
     -e PUID=0 \
     -e PGID=0 \
