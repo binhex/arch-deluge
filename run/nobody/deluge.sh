@@ -26,6 +26,8 @@ while [[ $(netstat -lnt | awk "\$6 == \"LISTEN\" && \$4 ~ \".58846\"") == "" ]];
 	sleep 0.1
 done
 
+echo "[info] Deluge process listening on port 58846"
+
 # run script to check we don't have any torrents in an error state
 /home/nobody/torrentcheck.sh
 
