@@ -15,7 +15,7 @@ jobs:
       uses: machine-learning-apps/gpr-docker-publish@master
       id: docker
       with:
-        IMAGE_NAME: 'arch-base'
+        IMAGE_NAME: 'arch-deluge'
         TAG: 'latest'
         DOCKERFILE_PATH: 'Dockerfile'
         BUILD_CONTEXT: '.'
