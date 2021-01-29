@@ -31,10 +31,9 @@ jobs:
           password: ${{ secrets.CR_PAT }}
       -
         name: Identify GitHub tag name
-        run: |
-          shell: bash
-          run: echo "##[set-output name=tag;]$(echo ${GITHUB_REF#refs/tags/})"
-          id: extract_tag
+        shell: bash
+        run: echo "##[set-output name=tag;]$(echo ${GITHUB_REF#refs/tags/})"
+        id: identify_tag
       -
         name: Build and Push to GCR and Docker Hub
         uses: docker/build-push-action@v2
@@ -45,6 +44,6 @@ jobs:
           push: true
           tags: |
             ${{ github.repository }}:test
-            ${{ github.repository }}:${{ steps.extract_tag.outputs.tag }}
+            ${{ github.repository }}:${{ steps.identify_tag.outputs.tag }}
             ghcr.io/${{ github.repository }}:test
-            ghcr.io/${{ github.repository }}:${{ steps.extract_tag.outputs.tag }}
+            ghcr.io/${{ github.repository }}:${{ steps.identify_tag.outputs.tag }}
