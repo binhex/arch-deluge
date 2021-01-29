@@ -32,9 +32,11 @@ jobs:
       -
         name: Identify GitHub tag name
         run: |
-          export
+          shell: bash
+          run: echo "##[set-output name=tag;]$(echo ${GITHUB_REF#refs/tags/})"
+          id: extract_tag
       -
-        name: Identify GitHub tag name
+        name: Build and Push to GCR and Docker Hub
         uses: docker/build-push-action@v2
         with:
           context: .
@@ -43,4 +45,6 @@ jobs:
           push: true
           tags: |
             ${{ github.repository }}:test
-            ghcr.io/${{ github.repository }}:latest
+            ${{ github.repository }}:${{ steps.extract_tag.outputs.tag }}
+            ghcr.io/${{ github.repository }}:test
+            ghcr.io/${{ github.repository }}:${{ steps.extract_tag.outputs.tag }}
