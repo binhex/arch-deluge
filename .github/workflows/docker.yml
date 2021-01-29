@@ -44,5 +44,3 @@ jobs:
           tags: |
             ${{ github.repository }}:test
             ghcr.io/${{ github.repository }}:latest
-s
-
