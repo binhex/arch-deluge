@@ -38,7 +38,7 @@ jobs:
       -
         name: Identify GitHub tag name
         shell: bash
-        run: echo "##[set-output name=tag;]$(echo ${GITHUB_REF#refs/tags/})"
+        run: echo "##[set-output name=tag;]$(tag_name=${GITHUB_REF#refs/tags/} && echo "${tag_name//+/-}")"
         id: identify_tag
       -
         name: Build and Push to GCR and Docker Hub
