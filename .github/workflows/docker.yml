@@ -33,4 +33,16 @@ jobs:
         name: Identify GitHub tag name
         run: |
           export
+      -
+        name: Identify GitHub tag name
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: |
+            ${{ GITHUB_REPOSITORY }}:test
+            ghcr.io/${{ GITHUB_REPOSITORY }}:latest
+
 
