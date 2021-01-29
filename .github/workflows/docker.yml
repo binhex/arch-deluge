@@ -42,7 +42,7 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            ${{ GITHUB_REPOSITORY }}:test
-            ghcr.io/${{ GITHUB_REPOSITORY }}:latest
+            ${{ env.GITHUB_REPOSITORY }}:test
+            ghcr.io/${{ env.GITHUB_REPOSITORY }}:latest
 
 
