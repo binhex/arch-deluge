@@ -48,6 +48,15 @@ if [[ ! -z "${pacman_packages}" ]]; then
 	pacman -S --needed $pacman_packages --noconfirm
 fi
 
+# aur packages
+####
+
+# define aur packages
+aur_packages="7-zip-bin"
+
+# call aur install script (arch user repo)
+source aur.sh
+
 # tweaks
 ####
 
