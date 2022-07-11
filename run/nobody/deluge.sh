@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/dumb-init /bin/bash
 
 # if config file doesnt exist (wont exist until user changes a setting) then copy default config file
 if [[ ! -f /config/core.conf ]]; then
