@@ -57,19 +57,6 @@ aur_packages="7-zip-bin"
 # call aur install script (arch user repo)
 source aur.sh
 
-# custom
-####
-
-# this downgrades libtorrent from the troublesome v2 to v1
-# see here for details:- https://forums.unraid.net/bug-reports/stable-releases/crashes-since-updating-to-v611x-for-qbittorrent-and-deluge-users-r2153/?do=findComment&comment=21671
-package_name="libtorrent-rasterbar.tar.zst"
-
-# download package
-rcurl.sh -o "/tmp/${package_name}" "https://github.com/binhex/packages/raw/master/compiled/${OS_ARCH}/${package_name}"
-
-# install package
-pacman -U "/tmp/${package_name}" --noconfirm
-
 # tweaks
 ####
 
