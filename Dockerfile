@@ -33,16 +33,6 @@ RUN chmod +x /root/*.sh && \
 # docker settings
 #################
 
-# expose port for http
-EXPOSE 8112
-
-# expose port for deluge daemon
-EXPOSE 58846
-
-# expose port for incoming torrent data (tcp and udp)
-EXPOSE 58946
-EXPOSE 58946/udp
-
 # set environment variables for user nobody
 ENV HOME=/home/nobody
 
