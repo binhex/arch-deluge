@@ -1,6 +1,6 @@
 FROM binhex/arch-base:latest
-LABEL org.opencontainers.image.authors = "binhex"
-LABEL org.opencontainers.image.source = "https://github.com/binhex/arch-deluge"
+LABEL org.opencontainers.image.authors="binhex"
+LABEL org.opencontainers.image.source="https://github.com/binhex/arch-deluge"
 
 # release tag name from buildx arg
 ARG RELEASETAG
@@ -44,7 +44,7 @@ EXPOSE 58946
 EXPOSE 58946/udp
 
 # set environment variables for user nobody
-ENV HOME /home/nobody
+ENV HOME=/home/nobody
 
 # set permissions
 #################
