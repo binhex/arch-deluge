@@ -3,6 +3,18 @@
 # source in script to wait for child processes to exit
 source /usr/local/bin/waitproc.sh
 
+# set location for python eggs
+python_egg_cache="/config/python-eggs"
+
+if [[ ! -d "${python_egg_cache}" ]]; then
+	echo "[info] Creating Deluge Python Egg cache folder..."
+	mkdir -p "${python_egg_cache}"
+	chmod -R 755 "${python_egg_cache}"
+fi
+
+# export location of python egg cache
+export PYTHON_EGG_CACHE="${python_egg_cache}"
+
 # if config file doesnt exist (wont exist until user changes a setting) then copy default config file
 if [[ ! -f /config/core.conf ]]; then
 
