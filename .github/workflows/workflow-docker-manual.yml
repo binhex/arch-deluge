@@ -84,49 +84,7 @@ jobs:
           git_clone_scripts_repo="https://github.com/binhex/scripts.git"
           git clone "${git_clone_scripts_repo}" "${git_clone_scripts_dest}"
           "${git_clone_scripts_dest}/shell/arch/docker/testrunner.sh" --app-name ${{ steps.generate_app_name.outputs.app_name }} --image-name "ghcr.io/${{ github.repository }}:${{ steps.generate_temporary_tag_name.outputs.test_tag }}"
-      - name: Generate sub version tag name
-        shell: bash
-        run: |
-          # Get tag name
-          release_version="${{ github.event.inputs.tags }}"
-
-          # Validate and construct sub-version
-          if [[ "${release_version}" =~ ^(v?[0-9]+)\.([0-9]+)\.[0-9]+ ]]; then
-            sub_version="${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.x"
-            echo "[debug] Constructed sub-version: $sub_version"
-            echo "sub_version=$sub_version" >> $GITHUB_OUTPUT
-          else
-            echo "[warn] Release tag '${release_version}' does not include 3 or more octets, sub-version tag not created."
-            echo "sub_version=" >> $GITHUB_OUTPUT
-          fi
-        id: generate_sub_version
-
-      - name: Generate tag names
-        shell: bash
-        run: |
-          # Define registries
-          registries=(
-            "${{ github.repository }}"
-            "quay.io/${{ github.repository }}"
-            "ghcr.io/${{ github.repository }}"
-            "registry.gitlab.com/${{ github.repository }}"
-          )
-
-          # Construct tag names
-          tag_names=""
-          for registry in "${registries[@]}"; do
-            tag_names+="${registry}:${{ github.event.inputs.tags }}, "
-            if [[ -n "${{ steps.generate_sub_version.outputs.sub_version }}" ]]; then
-              tag_names+="${registry}:${{ steps.generate_sub_version.outputs.sub_version }}, "
-            fi
-          done
-
-          # Remove trailing comma and space
-          tag_names="${tag_names%, }"
-
-          # Output tag names
-          echo "tag_names=$tag_names" >> $GITHUB_OUTPUT
-        id: generate_tag_names      # note this will re-use the internal cached amd64 image from the previous build
+      # note this will re-use the internal cached amd64 image from the previous build
       - name: Build multi-arch Docker image, tag and push to registries
         uses: Wandalen/wretry.action@v3
         with:
@@ -135,7 +93,7 @@ jobs:
             context: .
             platforms: linux/amd64,linux/arm64
             push: true
-            tags: ${{ steps.generate_tag_names.outputs.tag_names }}
+            tags: ${{ github.repository }}:${{ github.event.inputs.tags }}, quay.io/${{ github.repository }}:${{ github.event.inputs.tags }}, ghcr.io/${{ github.repository }}:${{ github.event.inputs.tags }}, registry.gitlab.com/${{ github.repository }}:${{ github.event.inputs.tags }}
             build-args: |
               RELEASETAG=${{ github.event.inputs.tags }}
           attempt_limit: 3
