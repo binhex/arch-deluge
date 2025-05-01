@@ -135,7 +135,7 @@ jobs:
             context: .
             platforms: linux/amd64,linux/arm64
             push: true
-            tags: ${{ github.event.inputs.generate_tag_names }}
+            tags: ${{ steps.generate_tag_names.outputs.tag_names }}
             build-args: |
               RELEASETAG=${{ github.event.inputs.tags }}
           attempt_limit: 3
