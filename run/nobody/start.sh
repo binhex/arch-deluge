@@ -56,7 +56,7 @@ function main() {
 	if [[ "${CONFIGURE_INCOMING_PORT}" == "yes" ]]; then
 
 		echo "[info] Starting Deluge Web UI with port configuration..."
-		/usr/local/bin/portget.sh --application-name "${APPLICATION_NAME}" --application-port "${APPLICATION_PORT}" /usr/bin/deluge-web -d -c /config -L "${DELUGE_WEB_LOG_LEVEL}" -l /config/deluge-web.log
+		/usr/local/bin/portget.sh --application-name 'deluge' --application-port "${APPLICATION_PORT}" /usr/bin/deluge-web -d -c /config -L "${DELUGE_WEB_LOG_LEVEL}" -l /config/deluge-web.log
 	else
 		echo "[info] Skipping port configuration as env var 'CONFIGURE_INCOMING_PORT' is not set to 'yes'"
 		start_deluge
