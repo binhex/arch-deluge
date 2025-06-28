@@ -64,7 +64,7 @@ chmod +x /usr/bin/7z
 # tweaks
 ####
 
-# change peerid to appear to be 2.1.1 stable - note this does not work for all/any private trackers at present
+# change peerid to appear to be 2.1.1 stable - note this MAY not work for all private trackers at present
 sed -i -e "s~peer_id = substitute_chr(peer_id, 6, release_chr)~peer_id = \'-DE211s-\'\n        release_chr = \'s\'~g" /usr/lib/python3*/site-packages/deluge/core/core.py
 
 # container perms
