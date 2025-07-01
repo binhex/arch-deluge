@@ -19,7 +19,6 @@ Latest stable Deluge release from Arch Linux repo.
 
 ```bash
 docker run -d \
-
     -p 8112:8112 \
     -p 58846:58846 \
     -p 58946:58946 \
@@ -34,9 +33,7 @@ docker run -d \
     -e UMASK=<umask for created files> \
     -e PUID=<uid for user> \
     -e PGID=<gid for user> \
-
     binhex/arch-deluge
-
 ```
 
 Please replace all user variables in the above command defined by <> with the
@@ -50,7 +47,6 @@ correct values.
 
 ```bash
 docker run -d \
-
     -p 8112:8112 \
     -p 58846:58846 \
     -p 58946:58946 \
@@ -65,9 +61,7 @@ docker run -d \
     -e UMASK=000 \
     -e PUID=0 \
     -e PGID=0 \
-
     binhex/arch-deluge
-
 ```
 
 ## Notes
@@ -77,7 +71,6 @@ for the user you want to run the container as:-
 
 ```bash
 id <username>
-
 ```
 
 Default password for the webui is "deluge"
