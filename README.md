@@ -1,17 +1,23 @@
-**Application**
+# Application
 
 [Deluge](http://deluge-torrent.org/)
 
-**Description**
+## Description
 
-Deluge is a full-featured ​BitTorrent client for Linux, OS X, Unix and Windows. It uses ​libtorrent in its backend and features multiple user-interfaces including: GTK+, web and console. It has been designed using the client server model with a daemon process that handles all the bittorrent activity. The Deluge daemon is able to run on headless machines with the user-interfaces being able to connect remotely from any platform.
+Deluge is a full-featured ​BitTorrent client for Linux, OS X, Unix and Windows.
+It uses ​libtorrent in its backend and features multiple user-interfaces
+including: GTK+, web and console. It has been designed using the client server
+model with a daemon process that handles all the bittorrent activity. The Deluge
+daemon is able to run on headless machines with the user-interfaces being able
+to connect remotely from any platform.
 
-**Build notes**
+## Build notes
 
 Latest stable Deluge release from Arch Linux repo.
 
-**Usage**
-```
+## Usage
+
+```bash
 docker run -d \
     -p 8112:8112 \
     -p 58846:58846 \
@@ -20,6 +26,8 @@ docker run -d \
     -v <path for data files>:/data \
     -v <path for config files>:/config \
     -v /etc/localtime:/etc/localtime:ro \
+    -e GLUETUN_INCOMING_PORT=<yes|no> \
+    -e WEBUI_PORT=<port> \
     -e DELUGE_DAEMON_LOG_LEVEL=<critical|error|warning|info|debug> \
     -e DELUGE_WEB_LOG_LEVEL=<critical|error|warning|info|debug> \
     -e UMASK=<umask for created files> \
@@ -28,14 +36,16 @@ docker run -d \
     binhex/arch-deluge
 ```
 
-Please replace all user variables in the above command defined by <> with the correct values.
+Please replace all user variables in the above command defined by <> with the
+correct values.
 
-**Access application**<br>
+## Access application
 
 `http://<host ip>:8112`
 
-**Example**
-```
+## Example
+
+```bash
 docker run -d \
     -p 8112:8112 \
     -p 58846:58846 \
@@ -44,6 +54,8 @@ docker run -d \
     -v /apps/docker/deluge/data:/data \
     -v /apps/docker/deluge/config:/config \
     -v /etc/localtime:/etc/localtime:ro \
+    -e GLUETUN_INCOMING_PORT=no \
+    -e WEBUI_PORT=8112 \
     -e DELUGE_DAEMON_LOG_LEVEL=info \
     -e DELUGE_WEB_LOG_LEVEL=info \
     -e UMASK=000 \
@@ -52,11 +64,12 @@ docker run -d \
     binhex/arch-deluge
 ```
 
-**Notes**<br>
+## Notes
 
-User ID (PUID) and Group ID (PGID) can be found by issuing the following command for the user you want to run the container as:-
+User ID (PUID) and Group ID (PGID) can be found by issuing the following command
+for the user you want to run the container as:-
 
-```
+```bash
 id <username>
 ```
 
