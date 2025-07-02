@@ -27,7 +27,7 @@ docker run -d \
     -v <path for config files>:/config \
     -v /etc/localtime:/etc/localtime:ro \
     -e GLUETUN_INCOMING_PORT=<yes|no> \
-    -e APPLICATION_PORT=<port> \
+    -e WEBUI_PORT=<port> \
     -e DELUGE_DAEMON_LOG_LEVEL=<critical|error|warning|info|debug> \
     -e DELUGE_WEB_LOG_LEVEL=<critical|error|warning|info|debug> \
     -e UMASK=<umask for created files> \
@@ -55,7 +55,7 @@ docker run -d \
     -v /apps/docker/deluge/config:/config \
     -v /etc/localtime:/etc/localtime:ro \
     -e GLUETUN_INCOMING_PORT=no \
-    -e APPLICATION_PORT=8112 \
+    -e WEBUI_PORT=8112 \
     -e DELUGE_DAEMON_LOG_LEVEL=info \
     -e DELUGE_WEB_LOG_LEVEL=info \
     -e UMASK=000 \
