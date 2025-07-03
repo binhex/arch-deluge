@@ -63,7 +63,7 @@ function main() {
 	if [[ "${GLUETUN_INCOMING_PORT}" == "yes" ]]; then
 
 		echo "[info] Starting Deluge Web UI with port configuration..."
-		/usr/local/bin/portget.sh --application-name 'deluge' --webui-port "${WEBUI_PORT}" /usr/bin/deluge-web --do-not-daemonize --port "${WEBUI_PORT}" --config /config --loglevel "${DELUGE_WEB_LOG_LEVEL}" --logfile /config/deluge-web.log
+		/usr/local/bin/portget.sh --application-name 'deluge' --webui-port "${WEBUI_PORT}" --application-parameters /usr/bin/deluge-web --do-not-daemonize --port "${WEBUI_PORT}" --config /config --loglevel "${DELUGE_WEB_LOG_LEVEL}" --logfile /config/deluge-web.log
 	else
 		echo "[info] Skipping VPN incoming port configuration as env var 'GLUETUN_INCOMING_PORT' is not set to 'yes'"
 		start_deluge
