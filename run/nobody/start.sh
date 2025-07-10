@@ -1,20 +1,5 @@
 #!/usr/bin/dumb-init /bin/bash
 
-function start_deluge() {
-
-	# running common setup tasks
-	common
-
-	echo "[info] Deluge process listening on port 58846"
-
-	if ! pgrep -x "deluge-web" > /dev/null; then
-		echo "[info] Starting Deluge Web UI..."
-
-		# run process non daemonised (blocking)
-		/usr/bin/deluge-web --do-not-daemonize --port "${WEBUI_PORT}" --config /config --loglevel "${DELUGE_WEB_LOG_LEVEL}" --logfile /config/deluge-web.log
-	fi
-}
-
 function common(){
 
 	# source in script to wait for child processes to exit
@@ -60,14 +45,8 @@ function main() {
 		echo "[info] Using WEBUI_PORT=${WEBUI_PORT}"
 	fi
 
-	if [[ "${GLUETUN_INCOMING_PORT}" == "yes" ]]; then
-
-		echo "[info] Starting Deluge Web UI with port configuration..."
-		portget.sh --application-name 'deluge' --webui-port "${WEBUI_PORT}" --application-parameters /usr/bin/deluge-web --do-not-daemonize --port "${WEBUI_PORT}" --config /config --loglevel "${DELUGE_WEB_LOG_LEVEL}" --logfile /config/deluge-web.log
-	else
-		echo "[info] Skipping VPN incoming port configuration as env var 'GLUETUN_INCOMING_PORT' is not set to 'yes'"
-		start_deluge
-	fi
+	echo "[info] Starting Deluge Web UI..."
+	portset.sh --application-name 'deluge' --webui-port "${WEBUI_PORT}" --application-parameters /usr/bin/deluge-web --do-not-daemonize --port "${WEBUI_PORT}" --config /config --loglevel "${DELUGE_WEB_LOG_LEVEL}" --logfile /config/deluge-web.log
 }
 
 main
