@@ -18,7 +18,7 @@ function start_deluge() {
 function common(){
 
 	# source in script to wait for child processes to exit
-	source /usr/local/bin/waitproc.sh
+	source waitproc.sh
 
 	# set location for python eggs
 	python_egg_cache="/config/python-eggs"
@@ -63,7 +63,7 @@ function main() {
 	if [[ "${GLUETUN_INCOMING_PORT}" == "yes" ]]; then
 
 		echo "[info] Starting Deluge Web UI with port configuration..."
-		/usr/local/bin/portget.sh --application-name 'deluge' --webui-port "${WEBUI_PORT}" --application-parameters /usr/bin/deluge-web --do-not-daemonize --port "${WEBUI_PORT}" --config /config --loglevel "${DELUGE_WEB_LOG_LEVEL}" --logfile /config/deluge-web.log
+		portget.sh --application-name 'deluge' --webui-port "${WEBUI_PORT}" --application-parameters /usr/bin/deluge-web --do-not-daemonize --port "${WEBUI_PORT}" --config /config --loglevel "${DELUGE_WEB_LOG_LEVEL}" --logfile /config/deluge-web.log
 	else
 		echo "[info] Skipping VPN incoming port configuration as env var 'GLUETUN_INCOMING_PORT' is not set to 'yes'"
 		start_deluge
