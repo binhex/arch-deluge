@@ -45,8 +45,8 @@ function main() {
 		echo "[info] Using WEBUI_PORT=${WEBUI_PORT}"
 	fi
 
-	echo "[info] Starting Deluge Web UI..."
-	portset.sh --application-name 'deluge' --webui-port "${WEBUI_PORT}" --application-parameters /usr/bin/deluge-web --do-not-daemonize --port "${WEBUI_PORT}" --config /config --loglevel "${DELUGE_WEB_LOG_LEVEL}" --logfile /config/deluge-web.log
+	echo "[info] Starting ${APPNAME} Web UI..."
+	portset.sh --application-name "${APPNAME}" --webui-port "${WEBUI_PORT}" --application-parameters /usr/bin/deluge-web --do-not-daemonize --port "${WEBUI_PORT}" --config /config --loglevel "${DELUGE_WEB_LOG_LEVEL}" --logfile /config/deluge-web.log
 }
 
 main
