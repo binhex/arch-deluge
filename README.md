@@ -30,6 +30,8 @@ docker run -d \
     -e WEBUI_PORT=<port> \
     -e DELUGE_DAEMON_LOG_LEVEL=<critical|error|warning|info|debug> \
     -e DELUGE_WEB_LOG_LEVEL=<critical|error|warning|info|debug> \
+    -e HEALTHCHECK_COMMAND=<command> \
+    -e HEALTHCHECK_ACTION=<action> \
     -e UMASK=<umask for created files> \
     -e PUID=<uid for user> \
     -e PGID=<gid for user> \
