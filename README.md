@@ -32,6 +32,7 @@ docker run -d \
     -e DELUGE_WEB_LOG_LEVEL=<critical|error|warning|info|debug> \
     -e HEALTHCHECK_COMMAND=<command> \
     -e HEALTHCHECK_ACTION=<action> \
+    -e HEALTHCHECK_HOSTNAME=<hostname> \
     -e UMASK=<umask for created files> \
     -e PUID=<uid for user> \
     -e PGID=<gid for user> \
