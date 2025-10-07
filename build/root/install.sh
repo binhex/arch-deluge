@@ -54,15 +54,6 @@ if [[ -n "${pacman_packages}" ]]; then
 	pacman -S --needed $pacman_packages --noconfirm
 fi
 
-# aur packages
-####
-
-# define aur packages
-aur_packages=""
-
-# call aur install script (arch user repo)
-source aur.sh
-
 # custom
 ####
 
@@ -79,17 +70,11 @@ rm /tmp/7zip.tar.xz
 mv /tmp/7zzs /usr/bin/7z
 chmod +x /usr/bin/7z
 
-# tweaks
-####
-
-# change peerid to appear to be 2.1.1 stable - note this MAY not work for all private trackers at present
-sed -i -e "s~peer_id = substitute_chr(peer_id, 6, release_chr)~peer_id = \'-DE211s-\'\n        release_chr = \'s\'~g" /usr/lib/python3*/site-packages/deluge/core/core.py
-
 # container perms
 ####
 
 # define comma separated list of paths
-install_paths="/home/nobody"
+install_paths="/home/nobody,/usr/share/GeoIP"
 
 # split comma separated string into list for install paths
 IFS=',' read -ra install_paths_list <<< "${install_paths}"
@@ -98,7 +83,7 @@ IFS=',' read -ra install_paths_list <<< "${install_paths}"
 for i in "${install_paths_list[@]}"; do
 
 	# confirm path(s) exist, if not then exit
-	if [[ ! -d "${i}" ]]; then
+	if [[ ! -d ${i} ]]; then
 		echo "[crit] Path '${i}' does not exist, exiting build process..." ; exit 1
 	fi
 
