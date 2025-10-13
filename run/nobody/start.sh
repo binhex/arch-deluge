@@ -1,11 +1,123 @@
 #!/usr/bin/dumb-init /bin/bash
 
-function common(){
+function geoip() {
+
+  local geoip_dat_path
+  local geoip_url
+
+  geoip_dat_path="/config/GeoIP.dat"
+  geoip_url="https://geo.el0.org/GeoIP.dat.gz"
+
+  echo "[info] Checking GeoIP.dat ${geoip_dat_path}..."
+
+  if [[ -f "${geoip_dat_path}" ]]; then
+
+    local current_time
+    current_time=$(date +%s)
+
+    local modification_time
+    local week_seconds
+
+    modification_time=$(stat -c %Y "${geoip_dat_path}")
+    week_seconds=$(( 7 * 24 * 60 * 60 ))
+
+    if (( (current_time - modification_time) > week_seconds )); then
+      echo "[info] Found outdated GeoIP.dat...updating (timeout 10s)"
+    else
+      echo "[info] GeoIP.dat is up to date (downloaded in the last week)"
+      return
+    fi
+
+  else
+    echo "[info] No GeoIP.dat found...updating (timeout 10s)"
+  fi
+
+  # download geoip.dat
+  curl -s -L --retry 2 --retry-max-time 10 --retry-all-errors "${geoip_url}" | gunzip > "${geoip_dat_path}" && chmod 777 "${geoip_dat_path}"
+
+  # symlink geoip
+  source utils.sh && symlink --src-path "${geoip_dat_path}" --dst-path '/usr/share/GeoIP/GeoIP.dat' --link-type 'softlink'
+
+}
+
+function get_arch() {
+
+	local arch
+	arch=$(uname -m)
+
+	case "$arch" in
+		x86_64|amd64)
+			echo "amd64"
+			;;
+		aarch64|arm64)
+			echo "arm64"
+			;;
+		armv7l|armhf)
+			echo "armv7"
+			;;
+		armv6l)
+			echo "armv6"
+			;;
+		i386|i686)
+			echo "386"
+			;;
+		*)
+			echo "$arch"
+			;;
+	esac
+
+}
+
+function libtorrent() {
+
+	# get arch from helper
+	local target_arch
+	target_arch="$(get_arch)"
+
+	if [[ "${LIBTORRENT_VERSION}" == '1' ]]; then
+
+		# uninstall libtorrent v2
+		pacman -Rdd libtorrent-rasterbar --noconfirm 2>/dev/null
+
+		# install libtorrent v1 and dependencies
+		package_name="boost1.86-libs-x86_64.pkg.tar.zst"
+		rcurl.sh -o "/tmp/${package_name}" "https://github.com/binhex/packages/raw/refs/heads/master/compiled/${target_arch}/${package_name}"
+		pacman -U "/tmp/${package_name}" --noconfirm
+
+		package_name="boost1.86-x86_64.pkg.tar.zst"
+		rcurl.sh -o "/tmp/${package_name}" "https://github.com/binhex/packages/raw/refs/heads/master/compiled/${target_arch}/${package_name}"
+		pacman -U "/tmp/${package_name}" --noconfirm
+
+		package_name="libtorrent-rasterbar-1_2-git-x86_64.pkg.tar.zst"
+		rcurl.sh -o "/tmp/${package_name}" "https://github.com/binhex/packages/raw/refs/heads/master/compiled/${target_arch}/${package_name}"
+		pacman -U "/tmp/${package_name}" --noconfirm
+
+	elif [[ "${LIBTORRENT_VERSION}" == '2' ]]; then
+
+		# uninstall libtorrent v1 and dependencies
+		package_name="libtorrent-rasterbar-1_2-git-x86_64.pkg.tar.zst"
+		pacman -Rdd "${package_name}" --noconfirm 2>/dev/null
+
+		package_name="boost1.86-x86_64.pkg.tar.zst"
+		pacman -Rdd "${package_name}" --noconfirm 2>/dev/null
+
+		package_name="boost1.86-libs-x86_64.pkg.tar.zst"
+		pacman -Rdd "${package_name}" --noconfirm 2>/dev/null
+
+		# install libtorrent v2
+		pacman -S libtorrent-rasterbar --noconfirm
+
+	fi
+
+}
+
+function python_eggs(){
 
 	# source in script to wait for child processes to exit
 	source waitproc.sh
 
 	# set location for python eggs
+  local python_egg_cache
 	python_egg_cache="/config/python-eggs"
 
 	if [[ ! -d "${python_egg_cache}" ]]; then
@@ -16,6 +128,10 @@ function common(){
 
 	# export location of python egg cache
 	export PYTHON_EGG_CACHE="${python_egg_cache}"
+
+}
+
+function deluged(){
 
 	echo "[info] Attempting to start Deluge..."
 
@@ -35,8 +151,20 @@ function common(){
 
 function main() {
 
-	# running common setup tasks
-	common
+	# download geoip
+	export -f geoip
+	su nobody -c "bash -c 'geoip'"
+
+	# set python eggs path
+	export -f python_eggs
+	su nobody -c "bash -c 'python_eggs'"
+
+	# set libtorrent version (as root)
+	libtorrent
+
+  # run deluge daemon
+	export -f deluged
+	su nobody -c "bash -c 'deluged'"
 
 	if [[ -z "${WEBUI_PORT}" ]]; then
 		echo "[info] Environment variable 'WEBUI_PORT' is not set, defaulting to 8112..."
@@ -46,7 +174,7 @@ function main() {
 	fi
 
 	echo "[info] Starting ${APPNAME} Web UI..."
-	portset.sh --application-name "${APPNAME}" --webui-port "${WEBUI_PORT}" --application-parameters /usr/bin/deluge-web --do-not-daemonize --port "${WEBUI_PORT}" --config /config --loglevel "${DELUGE_WEB_LOG_LEVEL}" --logfile /config/deluge-web.log
+	su nobody -c "bash -c 'portset.sh --app-name ${APPNAME} --webui-port ${WEBUI_PORT} --app-parameters /usr/bin/deluge-web --do-not-daemonize --port ${WEBUI_PORT} --config /config --loglevel ${DELUGE_WEB_LOG_LEVEL} --logfile /config/deluge-web.log'"
 }
 
 main

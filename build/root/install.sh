@@ -137,6 +137,14 @@ rm /tmp/permissions_heredoc
 
 cat <<'EOF' > /tmp/envvars_heredoc
 
+export LIBTORRENT_VERSION=$(echo "${LIBTORRENT_VERSION}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
+if [[ ! -z "${LIBTORRENT_VERSION}" ]]; then
+	echo "[info] LIBTORRENT_VERSION defined as '${LIBTORRENT_VERSION}'" | ts '%Y-%m-%d %H:%M:%.S'
+else
+	echo "[info] LIBTORRENT_VERSION not defined,(via -e LIBTORRENT_VERSION), defaulting to '2'" | ts '%Y-%m-%d %H:%M:%.S'
+	export LIBTORRENT_VERSION="2"
+fi
+
 export DELUGE_DAEMON_LOG_LEVEL=$(echo "${DELUGE_DAEMON_LOG_LEVEL}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
 if [[ ! -z "${DELUGE_DAEMON_LOG_LEVEL}" ]]; then
 	echo "[info] DELUGE_DAEMON_LOG_LEVEL defined as '${DELUGE_DAEMON_LOG_LEVEL}'" | ts '%Y-%m-%d %H:%M:%.S'
