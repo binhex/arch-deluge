@@ -79,29 +79,36 @@ function libtorrent() {
 		# uninstall libtorrent v2
 		pacman -Rdd libtorrent-rasterbar --noconfirm 2>/dev/null
 
+		# set package type extension depending on arch
+		if [[ "${target_arch}" == 'amd64' ]]; then
+			extension='zst'
+		else
+			extension='xz'
+		fi
+
 		# install libtorrent v1 and dependencies
-		package_name="boost1.86-libs-x86_64.pkg.tar.zst"
+		package_name="boost1.86-libs-x86_64.pkg.tar.${extension}"
 		rcurl.sh -o "/tmp/${package_name}" "https://github.com/binhex/packages/raw/refs/heads/master/compiled/${target_arch}/${package_name}"
 		pacman -U "/tmp/${package_name}" --noconfirm
 
-		package_name="boost1.86-x86_64.pkg.tar.zst"
+		package_name="boost1.86-x86_64.pkg.tar.${extension}"
 		rcurl.sh -o "/tmp/${package_name}" "https://github.com/binhex/packages/raw/refs/heads/master/compiled/${target_arch}/${package_name}"
 		pacman -U "/tmp/${package_name}" --noconfirm
 
-		package_name="libtorrent-rasterbar-1_2-git-x86_64.pkg.tar.zst"
+		package_name="libtorrent-rasterbar-1_2-git-x86_64.pkg.tar.${extension}"
 		rcurl.sh -o "/tmp/${package_name}" "https://github.com/binhex/packages/raw/refs/heads/master/compiled/${target_arch}/${package_name}"
 		pacman -U "/tmp/${package_name}" --noconfirm
 
 	elif [[ "${LIBTORRENT_VERSION}" == '2' ]]; then
 
 		# uninstall libtorrent v1 and dependencies
-		package_name="libtorrent-rasterbar-1_2-git-x86_64.pkg.tar.zst"
+		package_name="libtorrent-rasterbar-1_2-git-x86_64.pkg.tar.${extension}"
 		pacman -Rdd "${package_name}" --noconfirm 2>/dev/null
 
-		package_name="boost1.86-x86_64.pkg.tar.zst"
+		package_name="boost1.86-x86_64.pkg.tar.${extension}"
 		pacman -Rdd "${package_name}" --noconfirm 2>/dev/null
 
-		package_name="boost1.86-libs-x86_64.pkg.tar.zst"
+		package_name="boost1.86-libs-x86_64.pkg.tar.${extension}"
 		pacman -Rdd "${package_name}" --noconfirm 2>/dev/null
 
 		# install libtorrent v2
