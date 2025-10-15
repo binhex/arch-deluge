@@ -68,16 +68,28 @@ function get_arch() {
 
 }
 
+function wait_pacman() {
+
+	while [[ -f '/var/lib/pacman/db.lck' ]]; do
+		sleep 1s
+	done
+
+}
+
 function libtorrent() {
 
 	# get arch from helper
 	local target_arch
 	target_arch="$(get_arch)"
 
+	# ensure we delete any previous pacman lock files
+	rm -f '/var/lib/pacman/db.lck'
+
 	if [[ "${LIBTORRENT_VERSION}" == '1' ]]; then
 
 		# uninstall libtorrent v2
 		pacman -Rdd libtorrent-rasterbar --noconfirm 2>/dev/null
+		wait_pacman
 
 		# set package type extension depending on arch
 		if [[ "${target_arch}" == 'amd64' ]]; then
@@ -90,29 +102,36 @@ function libtorrent() {
 		package_name="boost1.86-libs-${extension}"
 		rcurl.sh -o "/tmp/${package_name}" "https://github.com/binhex/packages/raw/refs/heads/master/compiled/${target_arch}/${package_name}"
 		pacman -U "/tmp/${package_name}" --noconfirm
+		wait_pacman
 
 		package_name="boost1.86-${extension}"
 		rcurl.sh -o "/tmp/${package_name}" "https://github.com/binhex/packages/raw/refs/heads/master/compiled/${target_arch}/${package_name}"
 		pacman -U "/tmp/${package_name}" --noconfirm
+		wait_pacman
 
 		package_name="libtorrent-rasterbar-1_2-git-${extension}"
 		rcurl.sh -o "/tmp/${package_name}" "https://github.com/binhex/packages/raw/refs/heads/master/compiled/${target_arch}/${package_name}"
 		pacman -U "/tmp/${package_name}" --noconfirm
+		wait_pacman
 
 	elif [[ "${LIBTORRENT_VERSION}" == '2' ]]; then
 
 		# uninstall libtorrent v1 and dependencies
 		package_name="libtorrent-rasterbar-1_2-git-${extension}"
 		pacman -Rdd "${package_name}" --noconfirm 2>/dev/null
+		wait_pacman
 
 		package_name="boost1.86-${extension}"
 		pacman -Rdd "${package_name}" --noconfirm 2>/dev/null
+		wait_pacman
 
 		package_name="boost1.86-libs-${extension}"
 		pacman -Rdd "${package_name}" --noconfirm 2>/dev/null
+		wait_pacman
 
 		# install libtorrent v2
 		pacman -S libtorrent-rasterbar --noconfirm
+		wait_pacman
 
 	fi
 
