@@ -9,10 +9,18 @@ on:
 
 jobs:
   call-reusable-workflow:
+    strategy:
+      matrix:
+        include:
+          - branch: main
+            tag_suffix: ""
+          - branch: libtorrentv1
+            tag_suffix: "-libtorrentv1"
     uses: binhex/workflow-templates/.github/workflows/workflow-docker-manual.yml@main
     with:
-      tags: ${{ github.event.inputs.tags }}
+      tags: ${{ github.event.inputs.tags }}${{ matrix.tag_suffix }}
       platforms: linux/amd64,linux/arm64
+      checkout_ref: ${{ matrix.branch }}
     secrets:
       CR_PAT: ${{ secrets.CR_PAT }}
       DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
@@ -20,8 +28,6 @@ jobs:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       EMAIL_ADDRESS: ${{ secrets.EMAIL_ADDRESS }}
       EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-      GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
-      GITLAB_USERNAME: ${{ secrets.GITLAB_USERNAME }}
       IMMORTALITY_PAT: ${{ secrets.IMMORTALITY_PAT }}
       QUAY_TOKEN: ${{ secrets.QUAY_TOKEN }}
       QUAY_USERNAME: ${{ secrets.QUAY_USERNAME }}
