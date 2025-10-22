@@ -26,7 +26,6 @@ docker run -d \
     -v <path for data files>:/data \
     -v <path for config files>:/config \
     -v /etc/localtime:/etc/localtime:ro \
-    -e LIBTORRENT_VERSION=<1|2> \
     -e GLUETUN_INCOMING_PORT=<yes|no> \
     -e WEBUI_PORT=<port> \
     -e DELUGE_DAEMON_LOG_LEVEL=<critical|error|warning|info|debug> \
