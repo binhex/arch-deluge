@@ -6,6 +6,7 @@ on:
       tags:
         description: 'Enter tag name for test/dev image'
         default: 'test'
+        required: true
 
 jobs:
   call-reusable-workflow:
