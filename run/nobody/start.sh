@@ -33,7 +33,7 @@ function geoip() {
   fi
 
   # download geoip.dat
-  curl -s -L --retry 2 --retry-max-time 10 --retry-all-errors "${geoip_url}" | gunzip > "${geoip_dat_path}" && chmod 777 "${geoip_dat_path}"
+  rcurl.sh "${geoip_url}" | gunzip > "${geoip_dat_path}" && chmod 777 "${geoip_dat_path}"
 
   # symlink geoip
   source utils.sh && symlink --src-path "${geoip_dat_path}" --dst-path '/usr/share/GeoIP/GeoIP.dat' --link-type 'softlink'
@@ -45,7 +45,7 @@ function python_eggs(){
 	# source in script to wait for child processes to exit
 	source waitproc.sh
 
-	# set location for python eggs
+	# set location for python egg cache
   local python_egg_cache
 	python_egg_cache="/config/python-eggs"
 
@@ -57,6 +57,19 @@ function python_eggs(){
 
 	# export location of python egg cache
 	export PYTHON_EGG_CACHE="${python_egg_cache}"
+
+	# set location for python egg plugins
+  local python_egg_plugins
+	python_egg_plugins="/config/plugins"
+
+	if [[ ! -d "${python_egg_plugins}" ]]; then
+		echo "[info] Creating Deluge Python Egg plugins folder..."
+		mkdir -p "${python_egg_plugins}"
+		chmod -R 755 "${python_egg_plugins}"
+	fi
+
+	# copy itconfig plugin egg file (downloaded in install.sh)
+	cp /home/nobody/*.egg "${python_egg_plugins}/"
 
 }
 
@@ -97,7 +110,7 @@ function main() {
 	fi
 
 	echo "[info] Starting ${APPNAME} Web UI..."
-	su nobody -c "bash -c 'portset.sh --app-name ${APPNAME} --webui-port ${WEBUI_PORT} --app-parameters /usr/bin/deluge-web --do-not-daemonize --port ${WEBUI_PORT} --config /config --loglevel ${DELUGE_WEB_LOG_LEVEL} --logfile /config/deluge-web.log'"
+	portset.sh --app-name "${APPNAME}" --webui-port "${WEBUI_PORT}" --app-parameters /usr/bin/deluge-web --do-not-daemonize --port "${WEBUI_PORT}" --config /config --loglevel "${DELUGE_WEB_LOG_LEVEL}" --logfile '/config/deluge-web.log'
 }
 
 main
