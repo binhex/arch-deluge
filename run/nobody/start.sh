@@ -1,5 +1,8 @@
 #!/usr/bin/dumb-init /bin/bash
 
+# source in script to wait for child processes to exit
+source waitproc.sh
+
 function geoip() {
 
   local geoip_dat_path
@@ -41,9 +44,6 @@ function geoip() {
 }
 
 function python_eggs(){
-
-	# source in script to wait for child processes to exit
-	source waitproc.sh
 
 	# set location for python egg cache
   local python_egg_cache
