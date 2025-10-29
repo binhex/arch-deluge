@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - branch: main
+          - branch: master
             tag_suffix: ""
           - branch: libtorrentv1
             tag_suffix: "-libtorrentv1"
