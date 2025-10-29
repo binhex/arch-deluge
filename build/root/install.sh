@@ -36,22 +36,34 @@ echo -e "export APPNAME=${APPNAME}\nexport IMAGE_RELEASE_TAG=${RELEASETAG}\nexpo
 # ensure we have the latest builds scripts
 refresh.sh
 
-# pacman packages
+# compile deluge + libtorrentv1
 ####
 
-# call pacman db and package updater script
-source upd.sh
+# define path to store compiled packages
+package_path="/tmp/package"
 
-# define pacman packages
-pacman_packages="deluge"
+# build deluge using makepkg and build and install libtorrent v1 using helper
+# note we do not install deluge as we need to ignore libtorrent-rasterbar before installing
+aur.sh --aor-package 'deluge' --aur-package 'libtorrent-rasterbar-1_2-git' --package-path "${package_path}"
 
-# install compiled packages using pacman
-if [[ -n "${pacman_packages}" ]]; then
-	# arm64 currently targetting aor not archive, so we need to update the system first
-	if [[ "${TARGETARCH}" == "arm64" ]]; then
-		pacman -Syu --noconfirm
-	fi
-	pacman -S --needed $pacman_packages --noconfirm
+# ignore aor package 'libtorrent-rasterbar' to prevent upgrade to libtorrent v2 as libtorrent
+# v2 causes numerous issues, including crashing on unraid due to kernel bug
+sed -i -e 's~IgnorePkg.*~IgnorePkg = filesystem libtorrent-rasterbar~g' '/etc/pacman.conf'
+
+# Find all deluge packages recursively in package-path and install
+deluge_packages=$(find "${package_path}" -name "deluge*.tar.*" -type f 2>/dev/null)
+
+if [[ -n "${deluge_packages}" ]]; then
+    echo "[info] Found deluge packages:"
+    echo "${deluge_packages}"
+    # Install each found package
+    for package in ${deluge_packages}; do
+        echo "[info] Installing package: ${package}"
+        pacman -U "${package}" --noconfirm
+    done
+else
+    echo "[warn] No deluge packages found in ${package_path} directory tree"
+    exit 1
 fi
 
 # custom
