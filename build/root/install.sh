@@ -50,19 +50,22 @@ aur.sh --aor-package 'deluge' --aur-package 'libtorrent-rasterbar-1_2-git' --pac
 # v2 causes numerous issues, including crashing on unraid due to kernel bug
 sed -i -e 's~IgnorePkg.*~IgnorePkg = filesystem libtorrent-rasterbar~g' '/etc/pacman.conf'
 
-# Find all deluge packages recursively in package-path and install
-deluge_packages=$(find "${package_path}" -name "deluge*.tar.*" -type f 2>/dev/null)
+# define glob pattern for deluge package(s)
+glob_package='deluge*.tar.*'
 
-if [[ -n "${deluge_packages}" ]]; then
-    echo "[info] Found deluge packages:"
-    echo "${deluge_packages}"
+# Find makepkg built package(s) recursively in package-path and install
+packages=$(find "${package_path}" -name "${glob_package}" -type f 2>/dev/null)
+
+if [[ -n "${packages}" ]]; then
+    echo "[info] Found packages:"
+    echo "${packages}"
     # Install each found package
-    for package in ${deluge_packages}; do
+    for package in ${packages}; do
         echo "[info] Installing package: ${package}"
         pacman -U "${package}" --noconfirm
     done
 else
-    echo "[warn] No deluge packages found in ${package_path} directory tree"
+    echo "[warn] No packages found in ${package_path} directory tree"
     exit 1
 fi
 
