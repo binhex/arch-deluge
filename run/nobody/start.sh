@@ -110,7 +110,20 @@ function main() {
 	fi
 
 	echo "[info] Starting ${APPNAME} Web UI..."
-	portset.sh --app-name "${APPNAME}" --webui-port "${WEBUI_PORT}" --app-parameters /usr/bin/deluge-web --do-not-daemonize --port "${WEBUI_PORT}" --config /config --loglevel "${DELUGE_WEB_LOG_LEVEL}" --logfile '/config/deluge-web.log'
+	portset.sh \
+		--app-name "${APPNAME}" \
+		--webui-port "${WEBUI_PORT}" \
+		--gluetun-incoming-port "${GLUETUN_INCOMING_PORT}" \
+		--gluetun-control-server-port "${GLUETUN_CONTROL_SERVER_PORT}" \
+		--gluetun-control-server-username "${GLUETUN_CONTROL_SERVER_USERNAME}" \
+		--gluetun-control-server-password "${GLUETUN_CONTROL_SERVER_PASSWORD}" \
+		--app-parameters /usr/bin/deluge-web \
+		--do-not-daemonize \
+		--port "${WEBUI_PORT}" \
+		--config /config \
+		--loglevel "${DELUGE_WEB_LOG_LEVEL}" \
+		--logfile '/config/deluge-web.log'
+
 }
 
 main

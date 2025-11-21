@@ -155,21 +155,25 @@ rm /tmp/permissions_heredoc
 
 cat <<'EOF' > /tmp/envvars_heredoc
 
-export DELUGE_DAEMON_LOG_LEVEL=$(echo "${DELUGE_DAEMON_LOG_LEVEL}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
-if [[ ! -z "${DELUGE_DAEMON_LOG_LEVEL}" ]]; then
-	echo "[info] DELUGE_DAEMON_LOG_LEVEL defined as '${DELUGE_DAEMON_LOG_LEVEL}'" | ts '%Y-%m-%d %H:%M:%.S'
-else
-	echo "[info] DELUGE_DAEMON_LOG_LEVEL not defined,(via -e DELUGE_DAEMON_LOG_LEVEL), defaulting to 'info'" | ts '%Y-%m-%d %H:%M:%.S'
-	export DELUGE_DAEMON_LOG_LEVEL="info"
-fi
+# source in utility functions, need process_env_var
+source utils.sh
 
-export DELUGE_WEB_LOG_LEVEL=$(echo "${DELUGE_WEB_LOG_LEVEL}" | sed -e 's~^[ \t]*~~;s~[ \t]*$~~')
-if [[ ! -z "${DELUGE_WEB_LOG_LEVEL}" ]]; then
-	echo "[info] DELUGE_WEB_LOG_LEVEL defined as '${DELUGE_WEB_LOG_LEVEL}'" | ts '%Y-%m-%d %H:%M:%.S'
-else
-	echo "[info] DELUGE_WEB_LOG_LEVEL not defined,(via -e DELUGE_WEB_LOG_LEVEL), defaulting to 'info'" | ts '%Y-%m-%d %H:%M:%.S'
-	export DELUGE_WEB_LOG_LEVEL="info"
-fi
+# Define environment variables to process
+# Format: "VAR_NAME:DEFAULT_VALUE:REQUIRED:MASK"
+env_vars=(
+	"GLUETUN_CONTROL_SERVER_PORT:8000:false:false"
+	"GLUETUN_CONTROL_SERVER_USERNAME::false:false"
+	"GLUETUN_CONTROL_SERVER_PASSWORD::false:true"
+	"GLUETUN_INCOMING_PORT:no:false:false"
+	"DELUGE_DAEMON_LOG_LEVEL:info:false:false"
+	"DELUGE_WEB_LOG_LEVEL:info:false:false"
+)
+
+# Process each environment variable
+for env_var in "${env_vars[@]}"; do
+	IFS=':' read -r var_name default_value required mask_value <<< "${env_var}"
+	process_env_var "${var_name}" "${default_value}" "${required}" "${mask_value}"
+done
 
 EOF
 
