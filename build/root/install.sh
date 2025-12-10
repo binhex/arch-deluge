@@ -71,7 +71,7 @@ mv /tmp/7zzs /usr/bin/7z
 chmod +x /usr/bin/7z
 
 # download latest release asset of deluge plugin itconfig
-gh.sh --github-owner zakkarry --github-repo deluge-ltconfig --download-type release --release-type binary --download-path /home/nobody --asset-glob '*.egg'
+gh.sh --github-owner zakkarry --github-repo deluge-ltconfig --download-type release --release-type binary --download-path /home/nobody --asset-regex '.*egg'
 
 # container perms
 ####
