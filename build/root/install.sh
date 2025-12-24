@@ -116,10 +116,6 @@ chmod -R 775 ${install_paths}
 # set permissions for python eggs to be a more restrictive 755, this prevents the warning message thrown by deluge on startup
 mkdir -p /home/nobody/.cache/Python-Eggs ; chmod -R 755 /home/nobody/.cache/Python-Eggs
 
-# disable built-in Deluge Plugin 'stats', as its currently broken in Deluge 2.x and causes log spam
-# see here for details https://dev.deluge-torrent.org/ticket/3310
-chmod 000 /usr/lib/python3*/site-packages/deluge/plugins/Stats*.egg
-
 # In install.sh heredoc, replace the chown section:
 cat <<EOF > /tmp/permissions_heredoc
 install_paths="${install_paths}"
