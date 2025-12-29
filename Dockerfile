@@ -43,7 +43,7 @@ ENV HOME=/home/nobody
 HEALTHCHECK \
 	--interval=2m \
 	--timeout=2m \
-	--retries=5 \
+	--retries=3 \
 	--start-period=2m \
   CMD /usr/local/bin/system/scripts/docker/healthcheck.sh || exit 1
 
