@@ -50,24 +50,27 @@ aur.sh --aor-package 'deluge' --aur-package 'libtorrent-rasterbar-1_2-git' --pac
 # v2 causes numerous issues, including crashing on unraid due to kernel bug
 sed -i -e 's~IgnorePkg.*~IgnorePkg = filesystem libtorrent-rasterbar~g' '/etc/pacman.conf'
 
-# define glob pattern for deluge package(s)
-glob_package='deluge*.tar.*'
+# define glob patterns for deluge packages in specific order
+# install base deluge package first, then deluge-gtk
+glob_packages=('deluge-[0-9]*.tar.*' 'deluge-gtk*.tar.*')
 
-# Find makepkg built package(s) recursively in package-path and install
-packages=$(find "${package_path}" -name "${glob_package}" -type f 2>/dev/null)
+for glob_package in "${glob_packages[@]}"; do
+    # Find makepkg built package(s) recursively in package-path and install
+    packages=$(find "${package_path}" -name "${glob_package}" -type f 2>/dev/null)
 
-if [[ -n "${packages}" ]]; then
-    echo "[info] Found packages:"
-    echo "${packages}"
-    # Install each found package
-    for package in ${packages}; do
-        echo "[info] Installing package: ${package}"
-        pacman -U "${package}" --noconfirm
-    done
-else
-    echo "[warn] No packages found in ${package_path} directory tree"
-    exit 1
-fi
+    if [[ -n "${packages}" ]]; then
+        echo "[info] Found packages matching ${glob_package}:"
+        echo "${packages}"
+        # Install each found package
+        for package in ${packages}; do
+            echo "[info] Installing package: ${package}"
+            pacman -U "${package}" --noconfirm
+        done
+    else
+        echo "[warn] No packages found matching ${glob_package} in ${package_path} directory tree"
+        exit 1
+    fi
+done
 
 # custom
 ####
