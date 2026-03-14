@@ -17,7 +17,7 @@ jobs:
             tag_suffix: ""
           - branch: libtorrentv1
             tag_suffix: ""
-    uses: binhex/workflow-templates/.github/workflows/workflow-docker-manual.yml@main
+    uses: binhex/templates/.github/workflows/workflow-docker-manual.yml@main
     with:
       tags: ${{ github.event.inputs.tags }}
       platforms: linux/amd64,linux/arm64
