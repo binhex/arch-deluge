@@ -17,7 +17,7 @@ jobs:
     uses: binhex/templates/.github/workflows/workflow-docker-release.yml@main
     with:
       tags: ${{ github.event.inputs.tags }}
-      platforms: linux/amd64,linux/arm64
+      platforms: linux/amd64
       checkout_ref: ${{ matrix.branch }}
     secrets:
       CR_PAT: ${{ secrets.CR_PAT }}
