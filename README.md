@@ -27,6 +27,9 @@ docker run -d \
     -v <path for config files>:/config \
     -v /etc/localtime:/etc/localtime:ro \
     -e GLUETUN_INCOMING_PORT=<yes|no> \
+    -e GLUETUN_CONTROL_SERVER_PORT=<port> \
+    -e GLUETUN_CONTROL_SERVER_USERNAME=<username> \
+    -e GLUETUN_CONTROL_SERVER_PASSWORD=<password> \
     -e WEBUI_PORT=<port> \
     -e DELUGE_DAEMON_LOG_LEVEL=<critical|error|warning|info|debug> \
     -e DELUGE_WEB_LOG_LEVEL=<critical|error|warning|info|debug> \
