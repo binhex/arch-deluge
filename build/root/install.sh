@@ -171,6 +171,8 @@ env_vars=(
 	"GLUETUN_INCOMING_PORT:no:false:false"
 	"DELUGE_DAEMON_LOG_LEVEL:info:false:false"
 	"DELUGE_WEB_LOG_LEVEL:info:false:false"
+	"ENABLE_STARTUP_SCRIPTS:no:false:false"
+	"STARTUP_SCRIPTS_MODE:wait:false:false"
 )
 
 # Process each environment variable
